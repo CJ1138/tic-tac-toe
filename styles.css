@@ -1,0 +1,69 @@
+body{
+    background-color: rgb(122, 112, 112);
+}
+#main-container{
+    font-family: 'Fredericka the Great', cursive;
+    width: 100%;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+
+}
+h1{
+    color: white;
+    font-size: 60px;
+    font-weight: initial;
+}
+#board-container{
+    margin-top: 65px;
+    display: grid;
+    grid-template-columns: repeat(3, 150px [col-start]);
+    grid-template-rows: repeat(3, 150px [col-start]);
+
+}
+.game-square{
+    font-family: 'Fredericka the Great', cursive;
+    background-color: rgb(122, 112, 112);
+    font-size: 92px;
+    color: white;
+    text-align: center;
+    padding-top: 18px;
+    border: solid;
+}
+#div-0{
+    border-width: 0px 5px 5px 0px;
+
+}
+#div-1{
+    border-width: 0px 5px 5px 5px;
+
+}
+#div-2{
+    border-width: 0px 0px 5px 5px;
+
+}
+#div-3{
+    border-width: 5px 5px 5px 0px;
+
+}
+#div-4{
+    border-width: 5px 5px 5px 5px;
+
+}
+#div-5{
+    border-width: 5px 0px 5px 5px;
+
+}
+#div-6{
+    border-width: 5px 5px 0px 0px;
+
+}
+#div-7{
+    border-width: 5px 5px 0px 5px;
+
+}
+#div-8{
+    border-width: 5px 0px 0px 5px;
+
+}
