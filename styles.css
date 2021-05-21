@@ -1,5 +1,5 @@
 body{
-    background-color: rgb(122, 112, 112);
+    background-color: rgb(37, 37, 37);
 }
 #main-container{
     font-family: 'Fredericka the Great', cursive;
@@ -16,7 +16,7 @@ h1{
     font-weight: initial;
 }
 #board-container{
-    margin-top: 65px;
+    margin-top: 25px;
     display: grid;
     grid-template-columns: repeat(3, 150px [col-start]);
     grid-template-rows: repeat(3, 150px [col-start]);
@@ -24,7 +24,7 @@ h1{
 }
 .game-square{
     font-family: 'Fredericka the Great', cursive;
-    background-color: rgb(122, 112, 112);
+    background-color: rgb(37, 37, 37);
     font-size: 92px;
     color: white;
     text-align: center;
@@ -33,7 +33,7 @@ h1{
     cursor: pointer;
 }
 .game-square:hover{
-    background-color: rgb(134, 125, 125);
+    background-color: rgb(54, 54, 54);
 }
 #div-0{
     border-width: 0px 5px 5px 0px;
