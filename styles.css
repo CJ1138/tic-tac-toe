@@ -30,6 +30,10 @@ h1{
     text-align: center;
     padding-top: 18px;
     border: solid;
+    cursor: pointer;
+}
+.game-square:hover{
+    background-color: rgb(134, 125, 125);
 }
 #div-0{
     border-width: 0px 5px 5px 0px;
