@@ -17,6 +17,7 @@ h1{
 }
 #board-container{
     margin-top: 25px;
+    margin-bottom: 60px;
     display: grid;
     grid-template-columns: repeat(3, 150px [col-start]);
     grid-template-rows: repeat(3, 150px [col-start]);
@@ -30,10 +31,15 @@ h1{
     text-align: center;
     padding-top: 18px;
     border: solid;
+    border-color: white;
     cursor: pointer;
 }
 .game-square:hover{
     background-color: rgb(54, 54, 54);
+}
+.winning-row{
+    color: rgb(255,215,0);
+
 }
 #div-0{
     border-width: 0px 5px 5px 0px;
