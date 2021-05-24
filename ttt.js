@@ -1,3 +1,23 @@
+//Info screen module
+const infoScreen = (() => {
+
+    const screenArea = document.getElementById('info-screen');
+
+    function initialMessage(){
+        screenArea.addEventListener('click', Game.newGame);
+        screenArea.innerHTML = "CLICK HERE TO START A NEW GAME";
+    }
+
+    function winMessage(){
+        screenArea.innerHTML = `${Display.currentMarker} WINS! </br> CLICK HERE TO PLAY AGAIN`;
+
+    }
+
+    return {initialMessage, winMessage};
+
+
+})();
+
 //Game module
 const Game = (() => {
 
@@ -21,7 +41,7 @@ const Game = (() => {
         }
     }
 
-    const newGame = () => {
+    function newGame(){
        Display.newGame();
        _clearBoardObject();
 
@@ -51,7 +71,15 @@ const Game = (() => {
         }
     }
 
-    return{checkState, updateBoardObject, newGame};
+    function checkWin(){
+        if(checkState()){
+            let winArray = checkState();
+            infoScreen.winMessage();
+            return winArray;
+        }
+    }
+
+    return{checkState, updateBoardObject, newGame, checkWin};
 
 })();
 
@@ -71,9 +99,9 @@ const Display = (() =>{
 
     addSquareListeners();
 
-    let _currentMarker = 'X';
+    let currentMarker = 'X';
 
-    const _turnGold = (rowArray) => {
+    const turnGold = (rowArray) => {
         if(rowArray){
             rowArray.forEach(element => {
                 document.getElementById(element).style.color = 'rgb(218,165,32)';
@@ -99,15 +127,15 @@ const Display = (() =>{
         if (this.innerHTML){
             return;
         }else{
-            this.innerHTML = _currentMarker;
-            Game.updateBoardObject(this.id, _currentMarker);
-            let _check = Game.checkState();
-            _turnGold(_check);
+            this.innerHTML = currentMarker;
+            Game.updateBoardObject(this.id, currentMarker);
+            let _check = Game.checkWin();
+            turnGold(_check);
         }
-        if (_currentMarker === 'X'){
-            _currentMarker = 'O'
+        if (currentMarker === 'X'){
+            currentMarker = 'O'
         }else{
-            _currentMarker = 'X'
+            currentMarker = 'X'
         };
     }
 
@@ -117,9 +145,7 @@ const Display = (() =>{
         });
     }
 
-    _newGameBtn.addEventListener('click', Game.newGame);
-
-    return {newGame};
+    return {newGame, turnGold, currentMarker};
 
 })();
 
@@ -128,3 +154,6 @@ const Player = (name, choice) => {
 
 
 }
+
+//On intial load
+infoScreen.initialMessage();
