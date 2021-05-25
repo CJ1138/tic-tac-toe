@@ -156,4 +156,4 @@ const Player = (name, choice) => {
 }
 
 //On intial load
-infoScreen.initialMessage();
+//infoScreen.initialMessage();
