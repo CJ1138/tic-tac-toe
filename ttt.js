@@ -5,11 +5,44 @@ const infoScreen = (() => {
 
     function initialMessage(){
         screenArea.addEventListener('click', Game.newGame);
-        screenArea.innerHTML = "CLICK HERE TO START A NEW GAME";
+        screenArea.innerHTML = `
+            <div id="player-x">
+                PLAYER X
+                <div id="x-button-div">
+                    <button id="human" class="player-button">HUMAN</button>
+                    <button id="ai" class="player-button">AI</button>
+                </div>
+            </div>
+            <div id="player-o">
+                PLAYER O
+                <div id="y-button-div">
+                    <button id="human" class="player-button">HUMAN</button>
+                    <button id="ai" class="player-button">AI</button>
+                </div>
+            </div>
+            `;
+        let playerButtons = document.querySelectorAll('.player-button');
+        playerButtons.forEach((button) => {
+            if(button.id == 'human'){
+                button.addEventListener('click', Game.newHuman);
+            }else{
+                button.addEventListener('click', Game.newAI);
+            }
+
+        })
     }
 
-    function winMessage(){
-        screenArea.innerHTML = `${Display.currentMarker} WINS! </br> CLICK HERE TO PLAY AGAIN`;
+    function playerTurn(player){
+        screenArea.innerHTML = `
+            YOUR MOVE, player;
+        
+        `
+    }
+
+
+
+    function winMessage(playerButtons){
+        screenArea.innerHTML = `player WINS! </br> CLICK HERE TO PLAY AGAIN`;
 
     }
 
@@ -79,7 +112,15 @@ const Game = (() => {
         }
     }
 
-    return{checkState, updateBoardObject, newGame, checkWin};
+    function newHuman(){
+        console.log('working');
+    }
+
+    function newAI(){
+        console.log('workingAI');
+    }
+
+    return{checkState, updateBoardObject, newGame, checkWin, newHuman, newAI};
 
 })();
 
@@ -156,4 +197,4 @@ const Player = (name, choice) => {
 }
 
 //On intial load
-//infoScreen.initialMessage();
+infoScreen.initialMessage();
