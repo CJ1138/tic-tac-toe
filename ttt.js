@@ -32,6 +32,31 @@ const infoScreen = (() => {
         })
     }
 
+    function enterName(that){
+        let buttonDiv =  that.parentElement;
+        buttonDiv.innerHTML = `
+            <input type="text" name="${buttonDiv.parentElement.id}-name" placeholder="Enter name"></input>
+            <button name="yes">&check;</button>
+            <button name="no">X</button>
+        `
+        buttonDiv.querySelectorAll('button').forEach((item, index) =>{
+            item.addEventListener('click', ynBtns);
+        });
+    }
+
+    function ynBtns(e){
+        if(e.path[0].name === 'yes'){
+            initialMessage();
+        }else{
+            console.log("No");
+        }
+    }
+
+    function highlightButton(that){
+        let aiButton = that;
+        aiButton.style.backgroundColor = 'rgb(218,165,32)';
+    }
+
     function playerTurn(player){
         screenArea.innerHTML = `
             YOUR MOVE, player;
@@ -46,7 +71,7 @@ const infoScreen = (() => {
 
     }
 
-    return {initialMessage, winMessage};
+    return {initialMessage, winMessage, enterName, highlightButton};
 
 
 })();
@@ -113,11 +138,12 @@ const Game = (() => {
     }
 
     function newHuman(){
-        console.log('working');
+        infoScreen.enterName(this);
     }
 
     function newAI(){
-        console.log('workingAI');
+        infoScreen.highlightButton(this);
+        console.log('AI Player Selected');
     }
 
     return{checkState, updateBoardObject, newGame, checkWin, newHuman, newAI};

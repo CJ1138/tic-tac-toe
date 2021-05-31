@@ -4,6 +4,11 @@ body{
     font-family: 'Fredericka the Great', cursive;
 
 }
+
+
+input[type="text"]{
+    width: 120px;
+}
 #main-container{
     width: 100%;
     display: flex;
