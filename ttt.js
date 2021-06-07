@@ -4,7 +4,6 @@ const infoScreen = (() => {
     const screenArea = document.getElementById('info-screen');
 
     function initialMessage(){
-        screenArea.addEventListener('click', Game.newGame);
         screenArea.innerHTML = `
             <div id="player-x">
                 PLAYER X
@@ -224,3 +223,4 @@ const Player = (name, choice) => {
 
 //On intial load
 infoScreen.initialMessage();
+;
