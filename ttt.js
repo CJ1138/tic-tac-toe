@@ -56,6 +56,10 @@ const infoScreen = (() => {
         aiButton.style.backgroundColor = 'rgb(218,165,32)';
     }
 
+    function setInitial(){
+        
+    }
+
     function playerTurn(player){
         screenArea.innerHTML = `
             YOUR MOVE, player;
