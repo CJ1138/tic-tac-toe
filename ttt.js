@@ -1,11 +1,11 @@
 //Player prototypes
 
-const Player = (name, marker) =>{
-    return{name, marker};
+const Player = (name, marker, registered) =>{
+    return{name, marker, registered};
 }
 
-const PlayerX = Player("Player X", "x");
-const PlayerO = Player("Player O", "o");
+const PlayerX = Player("Player X", "x", "n");
+const PlayerO = Player("Player O", "o", "n");
 const ComputerPlayer = {}
 
 //Info screen module
@@ -70,6 +70,15 @@ const infoScreen = (() => {
         buttonDiv.innerHTML = `${name} <button name="no" id="${marker}-cancel" data-marker="${marker}">X</button>`;
         let noButton = document.getElementById(`${marker}-cancel`);
         noButton.addEventListener('click', _nameCancel);
+        _startQuestion();
+    }
+
+    //When two players have been selected, the game shoul ask the player(s) if they want to start
+
+    function _startQuestion(){
+        if (PlayerX.registered === 'y' && PlayerO.registered === 'y'){
+            screenArea.innerHTML = `Begin Game? <button id="begin-yes>Y</button>"`;
+        }
     }
 
     return {initialMessage, setName};
@@ -152,8 +161,10 @@ const Game = (() => {
         let rightName = e.path[1].childNodes[1].value.toUpperCase();
         if (e.path[0].dataset.marker === 'x'){
             PlayerX.name = rightName;
+            PlayerX.registered = 'y';
         } else {
             PlayerO.name = rightName;
+            PlayerO.registered = 'y';
         }
         infoScreen.setName(e.path[0].dataset.marker, rightName);
     }
