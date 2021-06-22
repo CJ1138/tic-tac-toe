@@ -1,87 +1,86 @@
+//Player prototypes
+
+const Player = (name, marker) =>{
+    return{name, marker};
+}
+
+const PlayerX = Player("Player X", "x");
+const PlayerO = Player("Player O", "o");
+const ComputerPlayer = {}
+
 //Info screen module
 const infoScreen = (() => {
 
+    //Creates a variable to hold the contents of the infoscreen div
     const screenArea = document.getElementById('info-screen');
 
+    //Sets the initial content of the info screen
     function initialMessage(){
         screenArea.innerHTML = `
             <div id="player-x">
                 PLAYER X
                 <div id="x-button-div">
-                    <button id="human" class="player-button">HUMAN</button>
-                    <button id="ai" class="player-button">AI</button>
                 </div>
             </div>
             <div id="player-o">
                 PLAYER O
-                <div id="y-button-div">
-                    <button id="human" class="player-button">HUMAN</button>
-                    <button id="ai" class="player-button">AI</button>
+                <div id="o-button-div">
                 </div>
             </div>
             `;
-        let playerButtons = document.querySelectorAll('.player-button');
-        playerButtons.forEach((button) => {
-            if(button.id == 'human'){
-                button.addEventListener('click', Game.newHuman);
-            }else{
-                button.addEventListener('click', Game.newAI);
-            }
+        _askName(`x`);
+        _playerOInitial();
+    }
 
+    function _askName(marker){
+        let nameField = `
+            <input type="text" id="${marker}-name" placeholder="Name"></input>
+            <button name="yes" id="${marker}-check" data-marker="${marker}" data-player="player">&check;</button>`
+        let destDiv = document.getElementById(`${marker}-button-div`)
+        destDiv.innerHTML = nameField;
+        let checkButton = document.getElementById(`${marker}-check`);
+        checkButton.addEventListener('click', Game.newHuman);
+    }
+
+    function _playerOInitial(){
+        let buttons = `<button id="human" class="player-button">HUMAN</button>
+                            <button id="ai" class="player-button">AI</button>`
+        let destDiv = document.getElementById(`o-button-div`)
+        destDiv.innerHTML = buttons;
+        let humanBtn = document.getElementById('human');
+        humanBtn.addEventListener('click', function(){
+            console.log(`working`);
+            _askName('o');
         })
     }
 
-    function enterName(that){
-        let buttonDiv =  that.parentElement;
-        buttonDiv.innerHTML = `
-            <input type="text" name="${buttonDiv.parentElement.id}-name" placeholder="Enter name"></input>
-            <button name="yes">&check;</button>
-            <button name="no">X</button>
-        `
-        buttonDiv.querySelectorAll('button').forEach((item, index) =>{
-            item.addEventListener('click', ynBtns);
-        });
-    }
+    //When someone presses tick, it should set the name of that player to the value entered
+    //and show that name on screen
 
-    function ynBtns(e){
-        if(e.path[0].name === 'yes'){
-            initialMessage();
+    function _nameCancel(e){
+        if(e.target.id === 'x-cancel'){
+            _askName('x');
         }else{
-            console.log("No");
+            _playerOInitial();
         }
     }
 
-    function highlightButton(that){
-        let aiButton = that;
-        aiButton.style.backgroundColor = 'rgb(218,165,32)';
+    function setName(marker, name){
+        let buttonDiv = document.getElementById(`${marker}-button-div`)
+        buttonDiv.innerHTML = `${name} <button name="no" id="${marker}-cancel" data-marker="${marker}">X</button>`;
+        let noButton = document.getElementById(`${marker}-cancel`);
+        noButton.addEventListener('click', _nameCancel);
     }
 
-    function setInitial(){
-        
-    }
-
-    function playerTurn(player){
-        screenArea.innerHTML = `
-            YOUR MOVE, player;
-        
-        `
-    }
-
-
-
-    function winMessage(playerButtons){
-        screenArea.innerHTML = `player WINS! </br> CLICK HERE TO PLAY AGAIN`;
-
-    }
-
-    return {initialMessage, winMessage, enterName, highlightButton};
-
+    return {initialMessage, setName};
 
 })();
 
 //Game module
 const Game = (() => {
+    let currentPlayer;
 
+    // Create an object called boardObject with distinctly set values
     let boardObject = {
         'div-0': '1',
         'div-1': '2',
@@ -94,7 +93,8 @@ const Game = (() => {
         'div-8': '9',
     }
 
-    const _clearBoardObject = () => {
+    //Function to return boardObject to its initial state
+    const _resetBoardObject = () => {
         let n = 1;
         for(let key in boardObject){
             boardObject[key] = n;
@@ -102,16 +102,22 @@ const Game = (() => {
         }
     }
 
+    //Function to call other functions to return the game and display
+    //to their initial states
     function newGame(){
-       Display.newGame();
-       _clearBoardObject();
+        currentPlayer = 'x';
+        Display.newGame();
+        _resetBoardObject();
 
     }
 
+    //Function to update boardObject to reflect the marker placed
+    //in a given move
     function updateBoardObject(divID, marker){
         boardObject[divID] = marker;
     }
 
+    //Function which checks the board obect to see if any row is in a win state and to return that row
     function checkState(){
         if(boardObject['div-0'] === boardObject['div-1'] && boardObject['div-1'] === boardObject['div-2']){
             return ['div-0', 'div-1', 'div-2'];
@@ -132,24 +138,27 @@ const Game = (() => {
         }
     }
 
+    //Calls the checkState function. If the checkState function returns true (ie a row is in a win state) calls
+    //the info screen funtion to say who won, and returns an array with the winning row
     function checkWin(){
         if(checkState()){
             let winArray = checkState();
-            infoScreen.winMessage();
+            infoScreen.winMessage(winningPlayer);
             return winArray;
         }
     }
 
-    function newHuman(){
-        infoScreen.enterName(this);
+    function newHuman(e){
+        let rightName = e.path[1].childNodes[1].value.toUpperCase();
+        if (e.path[0].dataset.marker === 'x'){
+            PlayerX.name = rightName;
+        } else {
+            PlayerO.name = rightName;
+        }
+        infoScreen.setName(e.path[0].dataset.marker, rightName);
     }
 
-    function newAI(){
-        infoScreen.highlightButton(this);
-        console.log('AI Player Selected');
-    }
-
-    return{checkState, updateBoardObject, newGame, checkWin, newHuman, newAI};
+    return{checkState, updateBoardObject, newGame, checkWin, newHuman};
 
 })();
 
@@ -160,16 +169,14 @@ const Display = (() =>{
     const _newGameBtn = document.getElementById('new-game');
 
     const addSquareListeners = () => {
-        _gameSquares.forEach((item, index) => _gameSquares[index].addEventListener('click', _makeMove));
+        //_gameSquares.forEach((item, index) => _gameSquares[index].addEventListener('click', Player.makeMove));
     }
     
     const removeSquareListeners = () => {
-        _gameSquares.forEach((item, index) => _gameSquares[index].removeEventListener('click', _makeMove));   
+        //_gameSquares.forEach((item, index) => _gameSquares[index].removeEventListener('click', Player.makeMove));   
     }
 
     addSquareListeners();
-
-    let currentMarker = 'X';
 
     const turnGold = (rowArray) => {
         if(rowArray){
@@ -193,37 +200,19 @@ const Display = (() =>{
         addSquareListeners();
     }
 
-    function _makeMove(e){
-        if (this.innerHTML){
-            return;
-        }else{
-            this.innerHTML = currentMarker;
-            Game.updateBoardObject(this.id, currentMarker);
-            let _check = Game.checkWin();
-            turnGold(_check);
-        }
-        if (currentMarker === 'X'){
-            currentMarker = 'O'
-        }else{
-            currentMarker = 'X'
-        };
-    }
-
     const _clearBoard = () => {
         _gameSquares.forEach((x) => {
             x.innerHTML = ''
         });
     }
 
-    return {newGame, turnGold, currentMarker};
+    return {newGame, turnGold};
 
 })();
 
-//New player module
-const Player = (name, choice) => {
 
 
-}
+
 
 //On intial load
 infoScreen.initialMessage();
